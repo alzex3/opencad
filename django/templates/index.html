@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}\
+
+{% block content %}
+    <header>
+
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+                <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+                    <img src="{% static "myapp/svg/logo.svg" %}" class="bi me-2" width="40" height="32" role="img" aria-label="opencad" alt="opencad">
+                </a>
+
+                <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="#" class="nav-link px-2 link-secondary">Home</a></li><li><a href="#" class="nav-link px-2 link-dark">Features</a></li>
+                    <li><a href="#" class="nav-link px-2 link-dark">FAQs</a></li>
+                    <li><a href="#" class="nav-link px-2 link-dark">About</a></li>
+                </ul>
+
+                <div class="col-md-3 text-end">
+                    <button type="button" class="btn btn-outline-primary me-2">Login</button>
+                    <button type="button" class="btn btn-primary">Sign-up</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row height d-flex justify-content-center ">
+                <div class="col-md-8">
+                    <figure class="text-center">
+                        <h1 class="display-4">SEARCH</h1>
+                    </figure>
+                    <form class="form-inline" action="" method="get">
+                        <div class="search">
+                            <i class="fa fa-search"></i>
+                            <input id="search_box"
+                                   aria-label="Search cadastral information"
+                                   name="search_box"
+                                   type="search"
+                                   class="form-control"
+                                   placeholder="Have a question? Ask Now">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </form>
+
+                    <div>
+                    {% if search %}
+
+                        {% for i in search %}
+                            <h3 class="display-8">{{ i.0 }}</h3>
+                            <p>{{ i.1 }}</p>
+                        {% endfor %}
+
+                        {% else %}
+                        <h3 class="display-8">Object not found! Try again!</h3>
+
+                    {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+{% endblock %}

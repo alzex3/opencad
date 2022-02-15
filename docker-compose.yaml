@@ -1,0 +1,46 @@
+services:
+  django-app:
+    build: django
+    restart: always
+    volumes:
+      - static_volume:/home/app/static
+    expose:
+      - '8000'
+    environment:
+      - POSTGRES_NAME=${POSTGRES_NAME}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PW}
+      - DEBUG=${DEBUG}
+      - ALLOWED_HOSTS=${DEBUG}
+      - SECRET_KEY=${SECRET_KEY}
+    depends_on:
+      - db
+    command: gunicorn -w 3 -t 60 -b 0.0.0.0:8000 myproject.wsgi
+
+  nginx-proxy:
+    build: nginx
+    restart: always
+    volumes:
+      - ./nginx/default.conf:/tmp/default.conf
+      - static_volume:/home/app/static
+    environment: 
+      - DJANGO_SERVER_ADDR=django-app:8000
+    ports:
+      - '80:80'
+    depends_on:
+      - django-app
+    command: /app/start.sh
+
+  db:
+    image: postgres:alpine
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_NAME=${POSTGRES_NAME}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PW}
+
+volumes:
+  static_volume:
+  postgres_data:

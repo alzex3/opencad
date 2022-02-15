@@ -1,0 +1,5 @@
+django
+requests
+urllib3
+gunicorn
+psycopg2-binary
