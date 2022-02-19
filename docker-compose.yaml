@@ -6,13 +6,6 @@ services:
       - static_volume:/home/app/static
     expose:
       - '8000'
-    environment:
-      - POSTGRES_NAME=${POSTGRES_NAME}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PW}
-      - DEBUG=${DEBUG}
-      - ALLOWED_HOSTS=${DEBUG}
-      - SECRET_KEY=${SECRET_KEY}
     depends_on:
       - db
     command: gunicorn -w 3 -t 60 -b 0.0.0.0:8000 myproject.wsgi
@@ -37,9 +30,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_NAME=${POSTGRES_NAME}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PW}
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
 
 volumes:
   static_volume:
