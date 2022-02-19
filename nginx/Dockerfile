@@ -11,5 +11,4 @@ COPY  start.sh /app/start.sh
 
 WORKDIR /app
 
-
-CMD ["nginx", "-g", "'daemon off;'"]
+RUN ["chmod", "+x", "/app/start.sh"]
