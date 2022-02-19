@@ -7,4 +7,4 @@ COPY  start.sh /app/start.sh
 
 WORKDIR /app
 
-#RUN ["chmod", "+x", "/app/start.sh"]
+RUN ["chmod", "+x", "/app/start.sh"]
