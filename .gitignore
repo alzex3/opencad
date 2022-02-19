@@ -10,7 +10,7 @@ db.sqlite3
 
 # Environments
 .idea
-.env
+django/.env
 .venv
 
 # Static
