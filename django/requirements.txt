@@ -4,3 +4,7 @@ urllib3
 gunicorn
 psycopg2-binary
 django-environ
+markdown
+django-filter
+pytz
+djangorestframework
