@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from myapp.views import MainView
+from myapp.views import MainView, ObjectDataView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', MainView.as_view()),
     path('api/', include('myapp.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    path('', MainView.as_view()),
+    path('api/object', ObjectDataView.as_view()),
 ]

@@ -9,22 +9,22 @@ def get_request(number):
     resp = rq.get(
         url=f'https://rosreestr.ru/fir_lite_rest/api/gkn/fir_lite_object/{number}',
         verify=False,
+        headers={'user-agent': 'restclient'}
     ).json()
 
     obj_type = resp['type']
     if resp['type'] == 'parcel':
         obj_type = 'parcelData'
 
-    object_data[resp['objectCn']] = {
+    object_data = {
         'cad_num': resp['objectCn'],
         'obj_type': resp['type'],
-        'address': resp['objectData']['address']['mergedAddress'],
-        'update_date': resp['objectData'][obj_type]['actualDate'],
-        'full_address': resp['objectData']['address']['note'],
+        'address': resp['objectData']['objectAddress'],
+        'update_date': resp['objectData']['actualDate'],
         'created_date': resp['objectData']['dateCreated'],
         'cost': resp['objectData'][obj_type]['cadCostValue'],
         'object_desc': resp['objectData']['objectDesc'],
-        'utility': resp['objectData'][obj_type]['utilByDoc'],
+        # 'utility': resp['objectData'][obj_type].get('utilByDoc'),
     }
 
     return object_data
@@ -32,7 +32,7 @@ def get_request(number):
 
 def get_cad_data(number):
     try:
-        resp = get_request(number)[number]
+        resp = get_request(number)
         answer = [
             (
                 'Кадастровый номер:', resp['cad_num']
@@ -42,9 +42,6 @@ def get_cad_data(number):
             ),
             (
                 'Адрес:', resp['address']
-            ),
-            (
-                'Полный адрес:', resp['full_address']
             ),
             (
                 'Стоимость:', resp['cost']

@@ -1,10 +1,22 @@
 from django.views.generic import TemplateView
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
-from services.api import get_cad_data
+from services.api import get_cad_data, get_request
 
-from .models import Facility, List, FacilityType
-from .serializers import FacilityTypeSerializer, FacilitySerializer
+from .models import Object, ObjectType
+from .serializers import FacilityTypeSerializer, FacilitySerializer, ObjectSerializer
+
+
+class ObjectDataView(APIView):
+
+    @staticmethod
+    def get(request):
+        cad_num = request.GET.get('cad_num')
+        resp = get_request(cad_num)
+        result = ObjectSerializer(resp).data
+        return Response(result)
 
 
 class MainView(TemplateView):
@@ -22,10 +34,10 @@ class MainView(TemplateView):
 
 
 class FacilityTypeViewSet(ModelViewSet):
-    queryset = FacilityType.objects.all()
+    queryset = ObjectType.objects.all()
     serializer_class = FacilityTypeSerializer
 
 
 class FacilityViewSet(ModelViewSet):
-    queryset = Facility.objects.all()
+    queryset = Object.objects.all()
     serializer_class = FacilitySerializer

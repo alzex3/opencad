@@ -1,12 +1,29 @@
 from rest_framework import serializers
 
-from .models import FacilityType, Facility
+from .models import ObjectType, Object
 from services.api import get_request
+
+
+class ObjectSerializer(serializers.ModelSerializer):
+
+    obj_type = serializers.StringRelatedField()
+
+    class Meta:
+        model = Object
+        fields = [
+            'cad_num',
+            'address',
+            'obj_type',
+            'address',
+            'update_date',
+            'created_date',
+            'cost',
+        ]
 
 
 class FacilityTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FacilityType
+        model = ObjectType
         fields = [
             'name',
             'verbose_name',
@@ -15,16 +32,16 @@ class FacilityTypeSerializer(serializers.ModelSerializer):
 
 class FacilitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Facility
-        fields = ['num', 'address']
+        model = Object
+        fields = ['cad_num', 'address']
 
     def create(self, validated_data):
         cad_num = validated_data['num']
         i = get_request(cad_num).get(cad_num)
 
-        Facility.objects.create(
+        Object.objects.create(
             num=cad_num,
-            type=FacilityType.objects.get(name=i.get('obj_type')),
+            type=ObjectType.objects.get(name=i.get('obj_type')),
             address=i.get('address'),
             full_address=i.get('full_address'),
             update_date=i.get('update_date'),
@@ -33,5 +50,3 @@ class FacilitySerializer(serializers.ModelSerializer):
         )
 
         return i
-
-

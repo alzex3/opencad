@@ -1,0 +1,14 @@
+// Objects Types:
+// parcel, building, facility, flat
+
+
+// Rosreestr API
+GET https://rosreestr.ru/fir_lite_rest/api/gkn/fir_lite_object/{{flat}}
+Accept: application/json
+User-Agent: restclient
+
+
+###
+// Get cad data for object  52:18:0050135:11
+GET {{host}}/object?cad_num={{construction}}
+Accept: application/json
