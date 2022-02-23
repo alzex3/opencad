@@ -1,23 +1,30 @@
 from rest_framework import serializers
 
-from .models import ObjectType, Object
-from services.api import get_request
+from .models import ObjectType, Object, ParcelObject, BuildingObject
+from services.api import get_object_data
 
-
-class ObjectSerializer(serializers.ModelSerializer):
-
-    obj_type = serializers.StringRelatedField()
-
-    class Meta:
-        model = Object
-        fields = [
+BASE_FIELDS = [
             'cad_num',
             'address',
             'obj_type',
-            'address',
             'update_date',
             'created_date',
-            'cost',
+            'cost', ]
+
+
+class ParcelObjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ParcelObject
+        fields = BASE_FIELDS + [
+            'utility',
+        ]
+
+
+class BuildingObjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BuildingObject
+        fields = BASE_FIELDS + [
+            'name',
         ]
 
 
@@ -37,7 +44,7 @@ class FacilitySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         cad_num = validated_data['num']
-        i = get_request(cad_num).get(cad_num)
+        i = get_object_data(cad_num).get(cad_num)
 
         Object.objects.create(
             num=cad_num,

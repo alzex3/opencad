@@ -1,12 +1,10 @@
 from django.views.generic import TemplateView
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from services.api import get_cad_data, get_request
+from services.api import get_cad_data, get_object_data
 
-from .models import Object, ObjectType
-from .serializers import FacilityTypeSerializer, FacilitySerializer, ObjectSerializer
+from .serializers import ParcelObjectSerializer, BuildingObjectSerializer
 
 
 class ObjectDataView(APIView):
@@ -14,9 +12,16 @@ class ObjectDataView(APIView):
     @staticmethod
     def get(request):
         cad_num = request.GET.get('cad_num')
-        resp = get_request(cad_num)
-        result = ObjectSerializer(resp).data
-        return Response(result)
+        object_data = get_object_data(cad_num)
+
+        if object_data.get('obj_type') == 'parcel':
+            return Response(ParcelObjectSerializer(object_data).data)
+
+        elif object_data.get('obj_type') == 'building':
+            return Response(BuildingObjectSerializer(object_data).data)
+
+        else:
+            return Response('Rosreestr API error!')
 
 
 class MainView(TemplateView):
@@ -31,13 +36,3 @@ class MainView(TemplateView):
             result = get_cad_data(search_query)
         context['search'] = result
         return self.render_to_response(context)
-
-
-class FacilityTypeViewSet(ModelViewSet):
-    queryset = ObjectType.objects.all()
-    serializer_class = FacilityTypeSerializer
-
-
-class FacilityViewSet(ModelViewSet):
-    queryset = Object.objects.all()
-    serializer_class = FacilitySerializer

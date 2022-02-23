@@ -8,7 +8,13 @@ Accept: application/json
 User-Agent: restclient
 
 
+
 ###
-// Get cad data for object  52:18:0050135:11
-GET {{host}}/object?cad_num={{construction}}
+// Get cad data
+GET {{host}}/object?cad_num={{parcel}}
+Accept: application/json
+
+###
+// Get cad data
+GET {{host}}/object?cad_num={{building}}
 Accept: application/json

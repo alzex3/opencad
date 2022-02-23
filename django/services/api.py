@@ -4,35 +4,53 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-def get_request(number):
-    object_data = {}
+def api_request(cad_num):
     resp = rq.get(
-        url=f'https://rosreestr.ru/fir_lite_rest/api/gkn/fir_lite_object/{number}',
+        url=f'https://rosreestr.ru/fir_lite_rest/api/gkn/fir_lite_object/{cad_num}',
         verify=False,
         headers={'user-agent': 'restclient'}
-    ).json()
+    )
 
-    obj_type = resp['type']
-    if resp['type'] == 'parcel':
-        obj_type = 'parcelData'
+    if resp.status_code == 200:
+        return resp.json()
 
-    object_data = {
-        'cad_num': resp['objectCn'],
-        'obj_type': resp['type'],
-        'address': resp['objectData']['objectAddress'],
-        'update_date': resp['objectData']['actualDate'],
-        'created_date': resp['objectData']['dateCreated'],
-        'cost': resp['objectData'][obj_type]['cadCostValue'],
-        'object_desc': resp['objectData']['objectDesc'],
-        # 'utility': resp['objectData'][obj_type].get('utilByDoc'),
-    }
 
-    return object_data
+def get_object_data(cad_num):
+    resp = api_request(cad_num)
+
+    if not resp:
+        return False
+
+    else:
+        object_data = {
+            'cad_num': resp.get('objectCn'),
+            'obj_type': resp.get('type'),
+            'address': resp.get('objectData').get('objectAddress'),
+            'update_date': resp.get('objectData').get('actualDate'),
+            'created_date': resp.get('objectData').get('dateCreated'),
+            'object_desc': resp.get('objectData').get('objectDesc'),
+        }
+
+        if resp['type'] == 'parcel':
+            parcel_data = {
+                'cost': resp.get('objectData').get('parcelData').get('cadCostValue'),
+                'utility': resp.get('objectData').get('parcelData').get('utilByDoc'),
+            }
+            object_data.update(parcel_data)
+
+        elif resp['type'] == 'building':
+            building_data = {
+                'cost': resp.get('objectData').get('building').get('cadCostValue'),
+                'name': resp.get('objectData').get('name'),
+            }
+            object_data.update(building_data)
+
+        return object_data
 
 
 def get_cad_data(number):
     try:
-        resp = get_request(number)
+        resp = get_object_data(number)
         answer = [
             (
                 'Кадастровый номер:', resp['cad_num']
