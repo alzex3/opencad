@@ -34,10 +34,11 @@ class BuildingObject(Object):
     name = models.CharField(max_length=100)
 
 
-class ConstructionObject(Object):
-    pass
-
-
 class FlatObject(Object):
-    pass
+    area = models.IntegerField()
+
+
+class ConstructionObject(Object):
+    name = models.CharField(max_length=100)
+
 

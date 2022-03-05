@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import ObjectType, Object, ParcelObject, BuildingObject
+from .models import ObjectType, Object, ParcelObject, BuildingObject, ConstructionObject, FlatObject
 from services.api import get_object_data
 
 BASE_FIELDS = [
@@ -23,6 +23,22 @@ class ParcelObjectSerializer(serializers.ModelSerializer):
 class BuildingObjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = BuildingObject
+        fields = BASE_FIELDS + [
+            'name',
+        ]
+
+
+class FlatObjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FlatObject
+        fields = BASE_FIELDS + [
+            'area',
+        ]
+
+
+class ConstructionObjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConstructionObject
         fields = BASE_FIELDS + [
             'name',
         ]

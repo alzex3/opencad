@@ -4,7 +4,8 @@ from rest_framework.response import Response
 
 from services.api import get_cad_data, get_object_data
 
-from .serializers import ParcelObjectSerializer, BuildingObjectSerializer
+from .serializers import ParcelObjectSerializer, BuildingObjectSerializer, FlatObjectSerializer, \
+    ConstructionObjectSerializer
 
 
 class ObjectDataView(APIView):
@@ -19,6 +20,12 @@ class ObjectDataView(APIView):
 
         elif object_data.get('obj_type') == 'building':
             return Response(BuildingObjectSerializer(object_data).data)
+
+        elif object_data.get('obj_type') == 'flat':
+            return Response(FlatObjectSerializer(object_data).data)
+
+        elif object_data.get('obj_type') == 'construction':
+            return Response(ConstructionObjectSerializer(object_data).data)
 
         else:
             return Response('Rosreestr API error!')

@@ -18,3 +18,13 @@ Accept: application/json
 // Get cad data
 GET {{host}}/object?cad_num={{building}}
 Accept: application/json
+
+###
+// Get cad data
+GET {{host}}/object?cad_num={{flat}}
+Accept: application/json
+
+###
+// Get cad data
+GET {{host}}/object?cad_num={{construction}}
+Accept: application/json

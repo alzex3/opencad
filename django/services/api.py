@@ -45,6 +45,20 @@ def get_object_data(cad_num):
             }
             object_data.update(building_data)
 
+        elif resp['type'] == 'flat':
+            flat_data = {
+                'cost': resp.get('objectData').get('flat').get('cadCostValue'),
+                'area': resp.get('objectData').get('flat').get('area'),
+            }
+            object_data.update(flat_data)
+
+        elif resp['type'] == 'construction':
+            construction_data = {
+                'cost': resp.get('objectData').get('construction').get('cadCostValue'),
+                'name': resp.get('objectData').get('name'),
+            }
+            object_data.update(construction_data)
+
         return object_data
 
 
